@@ -3,21 +3,18 @@ import qs from 'qs'
 
 const router = Router()
 
-const DROPBOX_REFRESH_TOKEN = globalThis.DROPBOX_REFRESH_TOKEN
-const DROPBOX_APP_KEY = globalThis.DROPBOX_APP_KEY
-const DROPBOX_APP_SECRET = globalThis.DROPBOX_APP_SECRET
-const DROPBOX_FOLDER_PATH = '/gallery'
+const DROPBOX_FOLDER_PATH = '/gallery'  // แก้ตามโฟลเดอร์ Dropbox ที่ต้องการ
 
-async function getAccessToken() {
+async function getAccessToken(appKey, appSecret, refreshToken) {
   const body = qs.stringify({
     grant_type: 'refresh_token',
-    refresh_token: DROPBOX_REFRESH_TOKEN,
+    refresh_token: refreshToken,
   })
 
   const res = await fetch('https://api.dropbox.com/oauth2/token', {
     method: 'POST',
     headers: {
-      'Authorization': 'Basic ' + btoa(`${DROPBOX_APP_KEY}:${DROPBOX_APP_SECRET}`),
+      'Authorization': 'Basic ' + btoa(`${appKey}:${appSecret}`),
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     body,
@@ -86,9 +83,10 @@ router.options('*', () => {
   })
 })
 
-router.get('/', async () => {
+router.get('/', async (request, env) => {
   try {
-    const accessToken = await getAccessToken()
+    // ดึงค่า secret จาก env
+    const accessToken = await getAccessToken(env.DROPBOX_APP_KEY, env.DROPBOX_APP_SECRET, env.DROPBOX_REFRESH_TOKEN)
     const files = await listFiles(accessToken)
     const urls = await Promise.all(
       files.map(async (file) => {
@@ -114,6 +112,6 @@ router.get('/', async () => {
 
 router.all('*', () => new Response('Not found.', { status: 404 }))
 
-addEventListener('fetch', (event) => {
-  event.respondWith(router.handle(event.request))  // ต้อง return Promise
-})
+export default {
+  fetch: (request, env) => router.handle(request, env)
+}
