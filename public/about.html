@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us | Pilot Pixel Thailand</title>
+   <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+
+  <!-- SEO & Social -->
+  <meta name="description" content="Meet the passionate team behind Pilot Pixel Thailand — expert photographers who capture emotion and adventure.">
+  <meta property="og:title" content="About Us | Pilot Pixel Thailand">
+  <meta property="og:description" content="We bring moments to life with photography that tells your story.">
+  <meta property="og:image" content="https://pilotpixelthailand.com/assets/images/about.jpg">
+  <meta property="og:url" content="https://pilotpixelthailand.com/about.html">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap & Styles -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style/main.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <img src="assets/images/logo.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top me-2">
+        Pilot Pixel
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="bg-light text-center py-5 border-bottom">
+    <div class="container">
+      <h1 class="display-4 fw-bold">About Us</h1>
+      <p class="lead">We are storytellers who speak through images, capturing the moments that matter most.</p>
+    </div>
+  </header>
+
+  <!-- Main Section -->
+  <main class="container my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6 fade-in">
+        <img src="assets/images/about.jpg" alt="Our team" class="img-fluid rounded shadow">
+      </div>
+      <div class="col-md-6 mt-4 mt-md-0 fade-in">
+        <h2 class="fw-bold">Who We Are</h2>
+        <p>
+          At Pilot Pixel Thailand, we are dedicated to turning real-life experiences into timeless visual stories. Our approach blends creativity, professionalism, and a deep respect for the unique energy of every moment.
+        </p>
+        <p>
+          Whether we're documenting adrenaline-filled adventures, heartfelt celebrations, or serene natural beauty, our team of photographers, editors, and visual creatives works seamlessly to deliver work that is as bold as it is meaningful.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-center text-white py-4">
+    <div class="container">
+      <p class="mb-1">&copy; 2025 Pilot Pixel Thailand. All rights reserved.</p>
+      <small>Follow us on 
+        <a href="https://www.instagram.com/pilotpixelthailand?igsh=MTMwYzZnMHVoOWtqcw%3D%3D&utm_source=qr" class="text-white text-decoration-underline">Instagram</a>, 
+        <a href="https://www.facebook.com/share/1BmTx13zsX/?mibextid=wwXIfr" class="text-white text-decoration-underline">Facebook</a>
+      </small>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const faders = document.querySelectorAll('.fade-in');
+      const appearOptions = { threshold: 0.2, rootMargin: "0px 0px -50px 0px" };
+
+      const appearOnScroll = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        });
+      }, appearOptions);
+
+      faders.forEach(fader => {
+        appearOnScroll.observe(fader);
+      });
+    });
+  </script>
+</body>
+</html>
