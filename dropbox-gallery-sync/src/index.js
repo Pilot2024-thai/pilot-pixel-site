@@ -6,9 +6,8 @@ const router = Router()
 const DROPBOX_REFRESH_TOKEN = globalThis.DROPBOX_REFRESH_TOKEN
 const DROPBOX_APP_KEY = globalThis.DROPBOX_APP_KEY
 const DROPBOX_APP_SECRET = globalThis.DROPBOX_APP_SECRET
-const DROPBOX_FOLDER_PATH = '/gallery'  // โฟลเดอร์ใน Dropbox
+const DROPBOX_FOLDER_PATH = '/gallery'
 
-// ฟังก์ชันขอ Access Token จาก Refresh Token
 async function getAccessToken() {
   const body = qs.stringify({
     grant_type: 'refresh_token',
@@ -29,7 +28,6 @@ async function getAccessToken() {
   return data.access_token
 }
 
-// ฟังก์ชันดึงรายชื่อไฟล์จากโฟลเดอร์ Dropbox
 async function listFiles(accessToken) {
   const res = await fetch('https://api.dropboxapi.com/2/files/list_folder', {
     method: 'POST',
@@ -45,7 +43,6 @@ async function listFiles(accessToken) {
   return data.entries.filter(e => e['.tag'] === 'file')
 }
 
-// ฟังก์ชันสร้างลิงก์แชร์สำหรับไฟล์ใน Dropbox
 async function getSharedLink(accessToken, path) {
   const res = await fetch('https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings', {
     method: 'POST',
@@ -79,14 +76,13 @@ async function getSharedLink(accessToken, path) {
 }
 
 router.options('*', () => {
-  // ตอบ preflight CORS request
   return new Response(null, {
     status: 204,
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    }
+    },
   })
 })
 
@@ -94,24 +90,24 @@ router.get('/', async () => {
   try {
     const accessToken = await getAccessToken()
     const files = await listFiles(accessToken)
-
-    const urls = await Promise.all(files.map(async (file) => {
-      const url = await getSharedLink(accessToken, file.path_lower)
-      return url
-    }))
-
+    const urls = await Promise.all(
+      files.map(async (file) => {
+        const url = await getSharedLink(accessToken, file.path_lower)
+        return url
+      })
+    )
     return new Response(JSON.stringify(urls.filter(Boolean)), {
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',   // ใส่ header CORS ตรงนี้
+        'Access-Control-Allow-Origin': '*',
       },
     })
   } catch (err) {
     return new Response(err.message || 'Internal Error', {
       status: 500,
       headers: {
-        'Access-Control-Allow-Origin': '*',  // ใส่ header CORS ตรงนี้ด้วย
-      }
+        'Access-Control-Allow-Origin': '*',
+      },
     })
   }
 })
@@ -119,5 +115,5 @@ router.get('/', async () => {
 router.all('*', () => new Response('Not found.', { status: 404 }))
 
 addEventListener('fetch', (event) => {
-  event.respondWith(router.handle(event.request))
+  event.respondWith(router.handle(event.request))  // ต้อง return Promise
 })
