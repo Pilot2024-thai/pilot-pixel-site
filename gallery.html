@@ -101,9 +101,10 @@
     </div>
   </header>
 
-  <!-- Gallery Section -->
   <main class="container py-5">
-    <div id="gallery" class="row g-4"></div>
+    <div class="row g-4" id="gallery">
+      <!-- รูปจะถูกเพิ่มด้วย JavaScript -->
+    </div>
   </main>
 
   <!-- Footer -->
@@ -120,46 +121,49 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-  function loadGallery() {
-    fetch("gallery.json?timestamp=" + new Date().getTime()) // ป้องกัน cache
+  document.addEventListener('DOMContentLoaded', () => {
+    const gallery = document.getElementById('gallery')
+
+    fetch('https://dropbox-gallery-sync.pilotpixelthailand.workers.dev')
       .then(res => res.json())
-      .then(images => {
-        const gallery = document.getElementById("gallery");
-        gallery.innerHTML = ""; // ล้างรูปเดิมก่อน
+      .then(urls => {
+        urls.forEach(url => {
+          const colDiv = document.createElement('div')
+          colDiv.className = 'col-sm-6 col-md-4 fade-in'
 
-        images.forEach(link => {
-          const col = document.createElement("div");
-          col.className = "col-sm-6 col-md-4 fade-in";
-          col.innerHTML = `
-            <div class="gallery-wrapper position-relative">
-              <img src="${link}" class="img-fluid rounded shadow-sm" alt="Gallery image">
-              <span class="watermark-text">© Pilot Pixel</span>
-            </div>
-          `;
-          gallery.appendChild(col);
-        });
+          const wrapper = document.createElement('div')
+          wrapper.className = 'gallery-wrapper position-relative'
 
-        const faders = document.querySelectorAll('.fade-in');
-        const appearOptions = { threshold: 0.2, rootMargin: "0px 0px -50px 0px" };
+          const img = document.createElement('img')
+          img.src = url
+          img.className = 'img-fluid rounded shadow-sm'
+          img.alt = 'Gallery photo'
+
+          const watermark = document.createElement('span')
+          watermark.className = 'watermark-text'
+          watermark.textContent = '© Pilot Pixel'
+
+          wrapper.appendChild(img)
+          wrapper.appendChild(watermark)
+          colDiv.appendChild(wrapper)
+          gallery.appendChild(colDiv)
+        })
+
+        // ฟังก์ชัน fade-in effect
+        const faders = document.querySelectorAll('.fade-in')
+        const appearOptions = { threshold: 0.2, rootMargin: "0px 0px -50px 0px" }
         const appearOnScroll = new IntersectionObserver((entries, observer) => {
           entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          });
-        }, appearOptions);
-        faders.forEach(fader => appearOnScroll.observe(fader));
+            if (!entry.isIntersecting) return
+            entry.target.classList.add('visible')
+            observer.unobserve(entry.target)
+          })
+        }, appearOptions)
+        faders.forEach(fader => appearOnScroll.observe(fader))
       })
-      .catch(error => {
-        console.error("ไม่สามารถโหลด gallery.json ได้:", error);
-      });
-  }
-
-  // โหลดครั้งแรกตอนเปิดหน้า
-  loadGallery();
-
-  // โหลดซ้ำทุก 5 นาที
-  setInterval(loadGallery, 5 * 60 * 1000); // 300000 ms = 5 นาที
+      .catch(err => console.error('Error loading gallery images:', err))
+  })
 </script>
+  
 </body>
 </html>
