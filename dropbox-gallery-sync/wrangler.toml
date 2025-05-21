@@ -1,4 +1,0 @@
-name = "dropbox-gallery-sync"
-main = "src/index.js"
-compatibility_date = "2025-05-21"
-
