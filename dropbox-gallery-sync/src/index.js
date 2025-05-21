@@ -3,9 +3,9 @@ import qs from 'qs'
 
 const router = Router()
 
-const DROPBOX_REFRESH_TOKEN = ENV_DROPBOX_REFRESH_TOKEN
-const DROPBOX_APP_KEY = ENV_DROPBOX_APP_KEY
-const DROPBOX_APP_SECRET = ENV_DROPBOX_APP_SECRET
+const DROPBOX_REFRESH_TOKEN = globalThis.DROPBOX_REFRESH_TOKEN
+const DROPBOX_APP_KEY = globalThis.DROPBOX_APP_KEY
+const DROPBOX_APP_SECRET = globalThis.DROPBOX_APP_SECRET
 const DROPBOX_FOLDER_PATH = '/gallery'  // โฟลเดอร์ใน Dropbox
 
 // ฟังก์ชันขอ Access Token จาก Refresh Token
