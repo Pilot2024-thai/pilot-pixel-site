@@ -2,7 +2,3 @@ name = "dropbox-gallery-sync"
 main = "src/index.js"
 compatibility_date = "2025-05-21"
 
-[secrets]
-DROPBOX_REFRESH_TOKEN = "ikx_oHWJ7-gAAAAAAAAAAa2rDWGk6uwUMggTyAJj3CGFxViihBeWUGcl6CoOwArp"
-DROPBOX_APP_KEY = "9q4xostz35xobpa"
-DROPBOX_APP_SECRET = "4n38qvssrf5trjn"
